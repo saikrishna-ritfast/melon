@@ -1,0 +1,99 @@
+version: '3.8'
+
+services:
+  # 1. PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: store_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgrespassword}
+      POSTGRES_DB: ${POSTGRES_DB:-soft_drink_db}
+    ports:
+      - '5435:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d soft_drink_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - store_network
+
+  # 2. Redis Caching & Rate Limiting Server
+  redis:
+    image: redis:7-alpine
+    container_name: store_redis
+    restart: always
+    command: redis-server --save 60 1 --loglevel warning
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - store_network
+
+  # 3. Node.js + Express API Backend
+  backend:
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
+    container_name: store_backend
+    restart: always
+    environment:
+      PORT: ${BACKEND_PORT:-5000}
+      NODE_ENV: production
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgrespassword}@postgres:5432/${POSTGRES_DB:-soft_drink_db}?schema=public
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: ${JWT_SECRET:-enterpriseproductionjwtsecretchangekey}
+      CORS_ORIGIN: http://localhost:${FRONTEND_PORT:-3000}
+    ports:
+      - '${BACKEND_PORT:-5000}:${BACKEND_PORT:-5000}'
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:5000/api/v1/products || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+    networks:
+      - store_network
+
+  # 4. Next.js Frontend Standalone Client
+  frontend:
+    build:
+      context: .
+      dockerfile: apps/frontend/Dockerfile
+    container_name: store_frontend
+    restart: always
+    environment:
+      PORT: ${FRONTEND_PORT:-3000}
+      NODE_ENV: production
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:5000/api/v1}
+    ports:
+      - '${FRONTEND_PORT:-3000}:${FRONTEND_PORT:-3000}'
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - store_network
+
+networks:
+  store_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
