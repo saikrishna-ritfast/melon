@@ -7,7 +7,7 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   const navItems = [
-    { name: 'Marketplace Catalog', href: '/dashboard', icon: '🛒' },
+    { name: 'Category', href: '/category', icon: '🛒' },
     { name: 'Settings', href: '/settings', icon: '⚙️' },
   ];
 
