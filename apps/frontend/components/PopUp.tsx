@@ -1,7 +1,7 @@
 
 const Form = ({children}:{children:React.ReactNode}) => {
   return (
-    <div className="w-[400px] rounded-2xl border-2 border-transparent bg-[linear-gradient(#212121,#212121)_padding-box,linear-gradient(145deg,transparent_35%,#e81cff,#40c9ff)_border-box] p-8 text-sm text-white box-border flex flex-col gap-5">
+    <div className="w-[400px] backdrop-blur-xl rounded-2xl absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] p-8 border border-gray-800 hover:border-indigo-500/50 hover:shadow-lg hover:shadow-indigo-500/10">
       <form className="flex flex-col gap-5">
         <div className="flex flex-col gap-0.5">
         {children}

@@ -5,15 +5,10 @@ const Input = ({ placeholder  , label}: { placeholder:string , label:string } ) 
         <label className="">{label}</label>
         <input 
             type="text"
-            className=""
+            className="flex h-10 w-full rounded-md border border-gray-600 text-sm font-normal px-2 tracking-wider"
             placeholder = {placeholder}
         />
     </div>
-    // <input
-    //   type="text"
-    //   className="flex h-10 w-full rounded-md border-2 border-[#414141] bg-[#313131] px-3 py-2 text-sm font-semibold text-white outline-none ring-offset-gray-950 placeholder:text-[#a1a1a1] focus-visible:border-white focus-visible:ring-1 focus-visible:ring-gray-500 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
-    //   placeholder="Enter your name"
-    // />
   )
 }
 
