@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { prisma } from '../services/db.service';
 
 export const getProducts = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  try {
+  try { 
     const { category, minPrice, maxPrice, search, page = '1', limit = '10' } = req.query;
 
     const parsedPage = parseInt(page as string, 10) || 1;
@@ -88,15 +88,14 @@ export const getProducts = async (req: Request, res: Response, next: NextFunctio
   }
 };
 
+
+
 export const getCategories = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const categories = await prisma.category.findMany({
       where: {
         parentId: null, // Fetch roots
-      },
-      include: {
-        children: true,
-      },
+      }
     });
     res.status(200).json({
       status: 'success',
@@ -106,3 +105,46 @@ export const getCategories = async (req: Request, res: Response, next: NextFunct
     next(error);
   }
 };
+
+export const createCategories = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const { name, slug, parentId } = req.body;
+
+    if (!name || typeof name !== 'string' || !name.trim()) {
+      res.status(400).json({
+        status: 'fail',
+        message: 'Category name is required',
+      });
+      return;
+    }
+
+    const cleanName = name.trim();
+    const cleanSlug = (slug && typeof slug === 'string' && slug.trim() ? slug : cleanName)
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+
+    const category = await prisma.category.create({
+      data: {
+        name: cleanName,
+        slug: cleanSlug
+      }
+    });
+
+    res.status(201).json({
+      status: 'success',
+      data: category,
+    });
+  } catch (error: any) {
+    if (error.code === 'P2002') {
+      res.status(409).json({
+        status: 'fail',
+        message: 'A category with this name or slug already exists',
+      });
+      return;
+    }
+    next(error);
+  }
+};
+

@@ -11,25 +11,11 @@ export default function Home() {
       
       <div className="flex flex-wrap gap-4 justify-center">
         <Link 
-          href="/dashboard" 
+          href="/category" 
           className={`px-5 py-2.5 rounded-full font-semibold text-sm transition-all duration-300 ${themeClasses} hover:cursor-pointer`}
         >
-          Go To Dashboard
+          Go To Application
         </Link>
-
-        {/* <Link 
-          href="/dashboard/settings" 
-          className={`px-5 py-2.5 rounded-full font-semibold text-sm transition-all duration-300 ${themeClasses} hover:cursor-pointer`}
-        >
-          Go To Settings (Nested Route)
-        </Link>
-
-        <Link 
-          href="/about" 
-          className={`px-5 py-2.5 rounded-full font-semibold text-sm transition-all duration-300 ${themeClasses} hover:cursor-pointer`}
-        >
-          Go To About Page (Simple Route)
-        </Link> */}
       </div>
     </main>
   );

@@ -14,6 +14,7 @@ router.post('/auth/login', authController.login);
 // Product Catalog
 router.get('/products', productController.getProducts);
 router.get('/products/categories', productController.getCategories);
+router.post('/products/categories', productController.createCategories);
 
 // Redis-Backed Shopping Cart (JWT authenticated)
 router.get('/cart', authenticate as any, cartController.getCart as any);

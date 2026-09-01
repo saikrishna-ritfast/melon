@@ -6,7 +6,6 @@ interface Category {
   id: string;
   name: string;
   slug: string;
-  children?: Category[];
 }
 
 export default function CategoryPage() {
@@ -23,6 +22,10 @@ export default function CategoryPage() {
   });
 
   console.log(categoriesData);
+
+  const createCategory = async() => {
+    
+  }
 
   const categories = categoriesData?.data || [];
 
@@ -86,22 +89,6 @@ export default function CategoryPage() {
                     </span>
                   </div>
                 </div>
-
-                {cat.children && cat.children.length > 0 && (
-                  <div className="mt-4 pt-4 border-t border-gray-800/80">
-                    <span className="text-xs text-gray-400 font-medium block mb-2">Subcategories:</span>
-                    <div className="flex flex-wrap gap-2">
-                      {cat.children.map((child) => (
-                        <span
-                          key={child.id}
-                          className="px-3 py-1 bg-slate-800 text-gray-300 text-xs rounded-lg border border-gray-700/50 font-medium"
-                        >
-                          {child.name}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
             ))}
           </div>
