@@ -1,6 +1,9 @@
 'use client';
 
+import Form from "@/components/PopUp";
+import Input from "@/components/ui/Input";
 import { useQuery } from "@tanstack/react-query";
+import {useState} from "react";
 
 interface Category {
   id: string;
@@ -9,6 +12,9 @@ interface Category {
 }
 
 export default function CategoryPage() {
+
+  const [ openModel , setOpenModel ] = useState(false)
+
   const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/v1';
 
   // Fetch Categories
@@ -23,11 +29,11 @@ export default function CategoryPage() {
 
   console.log(categoriesData);
 
-  const createCategory = async() => {
-    
-  }
-
   const categories = categoriesData?.data || [];
+
+  const clickModel = () => {
+    return "Hello"
+  }
 
   return (
     <main className="flex-1 p-8 text-white">
@@ -73,7 +79,7 @@ export default function CategoryPage() {
   
         {!isLoading && !isError && categories.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="h-44 bg-slate-900/80 border-2 border-dashed border-gray-800 hover:border-indigo-500/50 hover:shadow-lg hover:shadow-indigo-500/10 rounded-2xl p-6 transition-all duration-300 hover-shadow-indigo-500/10 flex flex-col justify-center items-center hover:cursor-pointer " >
+            <div onClick={() => clickModel()} className="h-44 bg-slate-900/80 border-2 border-dashed border-gray-800 hover:border-indigo-500/50 hover:shadow-lg hover:shadow-indigo-500/10 rounded-2xl p-6 transition-all duration-300 hover-shadow-indigo-500/10 flex flex-col justify-center items-center hover:cursor-pointer " >
             + Add Category
             </div>
             {categories.map((cat) => (
@@ -93,6 +99,10 @@ export default function CategoryPage() {
             ))}
           </div>
         )}
+
+        <Form>
+          <Input label="Category Name" placeholder="Enter category name" />
+        </Form>
       </div>
     </main>
   );
