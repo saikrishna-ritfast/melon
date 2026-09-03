@@ -6,7 +6,10 @@ export default function PortalLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen bg-slate-950">
+    <div
+      className="flex min-h-screen transition-colors duration-300"
+      style={{ background: 'var(--bg-page)' }}
+    >
       {/* Shared Sidebar */}
       <Sidebar />
 

@@ -5,7 +5,6 @@ import express, { Request, Response, NextFunction } from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import routes from './routes';
-import { redisRateLimiter } from './middleware/rate-limiter';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -22,9 +21,6 @@ app.use(
 // Payload parsers
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// Redis-backed rate limiting
-app.use(redisRateLimiter as any);
 
 // Base routing
 app.use('/api/v1', routes);

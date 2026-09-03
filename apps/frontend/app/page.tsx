@@ -1,21 +1,59 @@
 import Link from 'next/link';
+import ThemeSwitcher from '@/components/ThemeSwitcher';
 
 export default function Home() {
-  let themeClasses = 'bg-slate-900 border border-gray-850 text-gray-300 hover:bg-slate-800 hover:text-white';
-
   return (
-    <main className="flex-1 flex flex-col items-center justify-center min-h-screen bg-slate-950 text-white p-6">
-      <h1 className="text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 mb-8">
-        Welcome to Soft Drink & Books Monorepo
-      </h1>
-      
-      <div className="flex flex-wrap gap-4 justify-center">
-        <Link 
-          href="/category" 
-          className={`px-5 py-2.5 rounded-full font-semibold text-sm transition-all duration-300 ${themeClasses} hover:cursor-pointer`}
+    <main
+      className="flex-1 flex flex-col items-center justify-center min-h-screen p-6 relative transition-colors duration-300"
+      style={{
+        background: 'var(--bg-page)',
+        color: 'var(--text-primary)',
+      }}
+    >
+      {/* Top Right Theme Switcher */}
+      <div className="absolute top-6 right-6">
+        <ThemeSwitcher />
+      </div>
+
+      <div className="text-center max-w-xl mx-auto space-y-6">
+        <div
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold border"
+          style={{
+            background: 'var(--accent-subtle)',
+            color: 'var(--text-accent)',
+            borderColor: 'var(--accent-subtle-border)',
+          }}
         >
-          Go To Application
-        </Link>
+          <span>✨</span> Multi-Theme System Active
+        </div>
+
+        <h1
+          className="text-4xl sm:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent"
+          style={{ backgroundImage: 'var(--accent-gradient)' }}
+        >
+          Category Management Portal
+        </h1>
+
+        <p
+          className="text-base sm:text-lg"
+          style={{ color: 'var(--text-secondary)' }}
+        >
+          Manage product classifications and categories with seamless dynamic themes.
+        </p>
+
+        <div className="flex flex-wrap gap-4 justify-center pt-2">
+          <Link
+            href="/category"
+            className="px-6 py-3.5 rounded-xl font-semibold text-sm transition-all duration-200 shadow-lg cursor-pointer text-white flex items-center gap-2"
+            style={{
+              background: 'var(--accent-gradient)',
+              boxShadow: '0 8px 24px var(--accent-glow)',
+            }}
+          >
+            <span>📁</span>
+            Go To Categories
+          </Link>
+        </div>
       </div>
     </main>
   );
